@@ -3,56 +3,66 @@
 #include <iostream>
 
 ////////////////////////////////////////////////////////////////////////////
-std::vector<std::vector<int>> TSP_filter::solutions_off(int nb_base)
+void TSP_filter::solutions_off
 ////////////////////////////////////////////////////////////////////////////
+(
+ std::vector<std::vector<int>> &archive
+)
 {
- std::vector<std::vector<int>> sols;
- std::vector<std::vector<int>> domination_sols;
+ std::vector<std::vector<int>> new_archive;
 
- // Génère toutes les solutions
- for (int i = 0 ; i < nb_base ; i++)
-  sols.push_back(solution());
-
- // Ne garde que les dominantes
- for (size_t i = 0 ; i < sols.size() ; i++)
+ // Garde uniquement les solutions dominantes
+ for (size_t i = 0 ; i < archive.size() ; i++)
  {
-  bool is_equal = true;
-  for (size_t j = 0 ; j < domination_sols.size() ; j++)
+  bool is_not_dominated = true;
+  for (size_t j = 0 ; j < archive.size() ; j++)
   {
-   if (domination_sols[j].size() == 0 || sols[i].size() == 0)
-   {
-    std::cout << "WTF: " << std::endl;
-    std::cout << "j: " << j << std::endl;
-    std::cout << "j size: " << domination_sols.size() << std::endl; 
-    std::cout << "i: " << i << std::endl;
-    std::cout << "i size: " << sols.size() << std::endl; 
-    exit(-1);
-   }
-   int dom = dominating(domination_sols[j], sols[i]);
-   if (dom == 0)
-   {
-    is_equal = false;
-    break;
-   }
-   else if (dom == 2)
-   {
-    // On ajoute sols et on supprime tous les dominés dont j
-    domination_sols.erase(std::remove_if(domination_sols.begin(),
-                   domination_sols.end(),
-                   [&](const std::vector<int> &s)
-                   { return dominating(sols[i], s) == 0; }),
-                         domination_sols.end());
-    domination_sols.push_back(sols[i]);
-    is_equal = false;
-    break;
-   }
-  }
+   if (i==j)
+    continue;
 
-  if (is_equal)
-   domination_sols.push_back(sols[i]);
+   int dom = dominating(archive[i], archive[j]);
+   if (dom == 2)
+   {
+    is_not_dominated = false;
+    break; 
+   }
+  } 
+  if (is_not_dominated)
+   new_archive.push_back(archive[i]);
  }
 
- return domination_sols;
+ archive = new_archive;
+}
+
+////////////////////////////////////////////////////////////////////////////
+void TSP_filter::solutions_on
+////////////////////////////////////////////////////////////////////////////
+(
+ std::vector<std::vector<int>> &archive,
+ std::vector<int> new_sol 
+)
+{
+ for (size_t i = 0 ; i < archive.size() ; i++)
+ {
+  int dom = dominating(archive[i], new_sol);
+
+  // new sol est dominé
+  if (dom == 0)
+   return;
+  // new sol domine au moins une fois, donc elle peut être ajouté
+  else if (dom == 2)
+  {
+   archive.erase(std::remove_if(archive.begin(),
+                                archive.end(),
+                                [&](const std::vector<int> &s)
+                                { return dominating(new_sol, s) == 0; }),
+                 archive.end());
+   break;
+  }
+ }
+
+ // On l'ajoute à l'archive
+ archive.push_back(new_sol);
 }
 
 // 0 si sol1 domine sol2 

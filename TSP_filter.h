@@ -10,7 +10,10 @@ class TSP_filter : public TSP_Random
    TSP_Random(instances)
   {}
 
-  std::vector<std::vector<int>> solutions_off(int nb_base);
+  void solutions_on(std::vector<std::vector<int>> &archive,
+                    std::vector<int> new_sol);
+  void solutions_off(std::vector<std::vector<int>> &archive);
+
   int dominating(std::vector<int> sol1, std::vector<int> sol2);
 };
 

@@ -12,16 +12,28 @@ int main(int argc, char *argv[])
 
  std::vector<Instance> to_optimize;
 
+ // Récupération des instances
  for (int i = 0 ; i < argc-1 ; i++)
   to_optimize.push_back(Instance("../../instances/random"+std::string(argv[i+1])+"100.tsp"));
 
+ // Création du TSP filter
  TSP_filter tsp(to_optimize);
- auto sols = tsp.solutions_off(500);
 
- for (size_t i = 0 ; i < sols.size() ; i++)
+ // Création des 500 sols randoms
+ std::vector<std::vector<int>> archive;
+ for (int i = 0 ; i < 500 ; i++)
+  archive.push_back(tsp.solution());
+
+ std::vector<std::vector<int>> new_archive;
+ for (size_t i = 0 ; i < archive.size() ; i++)
+  tsp.solutions_on(new_archive, archive[i]);
+ archive = new_archive;
+  
+// tsp.solutions_off(archive);
+
+ for (size_t i = 0 ; i < archive.size() ; i++)
  {
-  auto evals = tsp.evaluations(sols[i]);
-  std::cout << i << " ";
+  auto evals = tsp.evaluations(archive[i]);
   for (size_t j = 0 ; j < evals.size() ; j++)
    std::cout << evals[j] << " ";
   std::cout << std::endl;
