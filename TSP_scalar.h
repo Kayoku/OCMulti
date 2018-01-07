@@ -9,12 +9,20 @@ class TSP_Scalar : public TSP_filter
   Archive archive;  
   float step;
   int generation;
+  int neighbours_by_parent;
+  int depth;
 
  public:
-  TSP_Scalar(std::vector<Instance> &instances, float step, int generation):
+  TSP_Scalar(std::vector<Instance> &instances,
+             float step,
+             int generation,
+             int neighbours_by_parent,
+             int depth):
    TSP_filter(instances),
    step(step),
-   generation(generation)
+   generation(generation),
+   neighbours_by_parent(neighbours_by_parent),
+   depth(depth)
   {
    for (int i = 0 ; i < 1000 ; i++)
     archive.push_back(random_solution());

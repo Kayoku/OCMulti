@@ -18,14 +18,19 @@ Archive TSP_Scalar::solution()
   Archive neighbours;
   for (auto parent: archive)
   {
-   for (int i = 0 ; i < 10 ; i++)
+   for (int i = 0 ; i < neighbours_by_parent ; i++)
    {
     auto child = parent;
-    rd1 = g()%child.size();
-    rd2 = g()%child.size();
-    while (rd2 == rd1)
-     rd2 = (g()+1)%child.size();
-    std::iter_swap(child.begin()+rd1, child.begin()+rd2);
+
+    for (int k = 0 ; k < (int)(g()%depth)+1 ; k++)
+    {
+     rd1 = g()%child.size();
+     rd2 = g()%child.size();
+     while (rd2 == rd1)
+      rd2 = (g()+1)%child.size();
+     std::iter_swap(child.begin()+rd1, child.begin()+rd2);
+    }
+
     neighbours.push_back(child);
    }
   }
