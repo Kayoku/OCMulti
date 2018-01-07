@@ -13,11 +13,12 @@ Archive TSP_Scalar::solution()
 
  for (int cur_gen = 0 ; cur_gen < generation ; cur_gen++)
  {
+  std::cerr << '\r' << cur_gen;
   // Génération des voisins
   Archive neighbours;
   for (auto parent: archive)
   {
-   for (int i = 0 ; i < (int)(1/step)+1 ; i++)
+   for (int i = 0 ; i < 10 ; i++)
    {
     auto child = parent;
     rd1 = g()%child.size();

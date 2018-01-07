@@ -18,10 +18,9 @@ int main(int argc, char *argv[])
   to_optimize.push_back(Instance("../../instances/random"+std::string(argv[i+1])+"100.tsp"));
 
  // Création du TSP filter
- TSP_Scalar tsp(to_optimize, 0.01, 10);
+ TSP_Scalar tsp(to_optimize, 0.01, 500);
  auto archive = tsp.solution();
 
- std::cout << archive.size() << std::endl;
  // Affichage archive
  for (size_t i = 0 ; i < archive.size() ; i++)
  {
