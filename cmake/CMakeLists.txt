@@ -16,5 +16,6 @@ add_executable(tsp
     ../TSP.cpp
     ../TSP_random.cpp
     ../TSP_filter.cpp
+    ../TSP_scalar.cpp
     ../Instance.cpp
 )

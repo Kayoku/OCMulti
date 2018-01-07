@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Instance.h"
 #include "TSP_filter.h"
+#include "TSP_scalar.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,8 +18,20 @@ int main(int argc, char *argv[])
   to_optimize.push_back(Instance("../../instances/random"+std::string(argv[i+1])+"100.tsp"));
 
  // Création du TSP filter
- TSP_filter tsp(to_optimize);
+ TSP_Scalar tsp(to_optimize, 0.01, 10);
+ auto archive = tsp.solution();
 
+ std::cout << archive.size() << std::endl;
+ // Affichage archive
+ for (size_t i = 0 ; i < archive.size() ; i++)
+ {
+  auto evals = tsp.evaluations(archive[i]);
+  for (size_t j = 0 ; j < evals.size() ; j++)
+   std::cout << evals[j] << " ";
+  std::cout << std::endl;
+ }
+
+ /*
  // Création des 500 sols randoms
  std::vector<std::vector<int>> archive;
  for (int i = 0 ; i < 500 ; i++)
@@ -37,7 +50,7 @@ int main(int argc, char *argv[])
   for (size_t j = 0 ; j < evals.size() ; j++)
    std::cout << evals[j] << " ";
   std::cout << std::endl;
- }
+ }*/
 
  return 0;
 }

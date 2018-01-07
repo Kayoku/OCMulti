@@ -12,7 +12,7 @@ class TSP_Random : public TSP
    srand(time(0));
   }
 
-  std::vector<int> solution() override;
+  Sol random_solution();
 };
 
 #endif

@@ -6,40 +6,35 @@
 void TSP_filter::solutions_off
 ////////////////////////////////////////////////////////////////////////////
 (
- std::vector<std::vector<int>> &archive
+ Archive &archive
 )
 {
- std::vector<std::vector<int>> new_archive;
+ size_t i = 0;
 
- // Garde uniquement les solutions dominantes
- for (size_t i = 0 ; i < archive.size() ; i++)
+ do
  {
-  bool is_not_dominated = true;
-  for (size_t j = 0 ; j < archive.size() ; j++)
-  {
-   if (i==j)
-    continue;
+  auto elem = archive[i];
+  int current_size = archive.size();
 
-   int dom = dominating(archive[i], archive[j]);
-   if (dom == 2)
-   {
-    is_not_dominated = false;
-    break; 
-   }
-  } 
-  if (is_not_dominated)
-   new_archive.push_back(archive[i]);
- }
-
- archive = new_archive;
+  archive.erase(std::remove_if(archive.begin(),
+                               archive.end(),
+                               [&](const std::vector<int> &s)
+                               { return dominating(elem, s) == 0; }),
+                archive.end());
+  int new_size = archive.size();
+  if (current_size != new_size)
+   i=0;
+  else
+   i++;
+ } while (i < archive.size());
 }
 
 ////////////////////////////////////////////////////////////////////////////
 void TSP_filter::solutions_on
 ////////////////////////////////////////////////////////////////////////////
 (
- std::vector<std::vector<int>> &archive,
- std::vector<int> new_sol 
+ Archive &archive,
+ Sol new_sol
 )
 {
  for (size_t i = 0 ; i < archive.size() ; i++)
@@ -65,6 +60,7 @@ void TSP_filter::solutions_on
  archive.push_back(new_sol);
 }
 
+
 // 0 si sol1 domine sol2 
 // 1 si sol1 et sol2 ne se domine pas
 // 2 si sol2 domine sol1
@@ -72,8 +68,8 @@ void TSP_filter::solutions_on
 int TSP_filter::dominating
 ////////////////////////////////////////////////////////////////////////////
 (
- std::vector<int> sol1,
- std::vector<int> sol2
+ Sol sol1,
+ Sol sol2
 )
 {
  int cpt = 0;
@@ -91,3 +87,4 @@ int TSP_filter::dominating
  else
   return 1;
 }
+
