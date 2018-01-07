@@ -1,19 +1,68 @@
 #include "TSP_scalar.h"
 #include <algorithm>
 #include <iostream>
+#include <fstream>
+
+////////////////////////////////////////////////////////////////////////////
+void k_opt
+////////////////////////////////////////////////////////////////////////////
+(
+ Sol &sol,
+ int index1,
+ int index2 
+)
+{
+ if (index1 > index2)
+ {
+  int new_index = index2;
+  index2 = index1;
+  index1 = new_index;
+ }
+
+ while (index1 < index2)
+ {
+  std::iter_swap(sol.begin()+index1, sol.begin()+index2);
+  index1++;
+  index2--;
+ }
+}
+
+////////////////////////////////////////////////////////////////////////////
+void TSP_Scalar::write_front
+////////////////////////////////////////////////////////////////////////////
+(
+ Archive &sol
+)
+{
+ std::ofstream file("test-"+std::to_string(current_generation)+".dat"); 
+
+ for (size_t i = 0 ; i < sol.size() ; i++)
+ {
+  auto evals = evaluations(sol[i]);
+  for (size_t j = 0 ; j < evals.size() ; j++)
+   file << evals[j] << " ";
+  file << std::endl;
+ }
+}
 
 ////////////////////////////////////////////////////////////////////////////
 Archive TSP_Scalar::solution()
 ////////////////////////////////////////////////////////////////////////////
 {
+ /*
  filter_scalar();
 
  int rd1 = 0;
  int rd2 = 0;
 
- for (int cur_gen = 0 ; cur_gen < generation ; cur_gen++)
+ while (current_generation < generation)
  {
-  std::cerr << '\r' << cur_gen;
+  if (current_generation%10 == 0)
+   write_front(archive);
+
+  std::cerr << '\r' << current_generation;
+  current_generation++;
+
   // Génération des voisins
   Archive neighbours;
   for (auto parent: archive)
@@ -22,14 +71,11 @@ Archive TSP_Scalar::solution()
    {
     auto child = parent;
 
-    for (int k = 0 ; k < (int)(g()%depth)+1 ; k++)
-    {
-     rd1 = g()%child.size();
-     rd2 = g()%child.size();
-     while (rd2 == rd1)
-      rd2 = (g()+1)%child.size();
-     std::iter_swap(child.begin()+rd1, child.begin()+rd2);
-    }
+    rd1 = g()%child.size();
+    rd2 = g()%child.size();
+    while (rd2 == rd1)
+     rd2 = (g()+1)%child.size();
+    k_opt(child, rd1, rd2);
 
     neighbours.push_back(child);
    }
@@ -40,6 +86,16 @@ Archive TSP_Scalar::solution()
 
   filter_scalar();
  }
+
+ return archive;*/
+
+ // Génération des points liés à un poids
+ int nb_points = 1/ + 1;
+
+ // k-opt sur chaque points jusqu'à tant de temps ou 
+ // tant d'itération
+
+ // Filtre off
 
  return archive;
 }
