@@ -135,15 +135,15 @@ void TSP::filter_online
   int dom = compare(archive[i], new_sol);
 
   // new sol est dominé
-  if (dom == 0)
+  if (dom == SOL1_DOMINATION)
    return;
   // new sol domine au moins une fois, donc elle peut être ajouté
-  else if (dom == 2)
+  else if (dom == SOL2_DOMINATION)
   {
    archive.erase(std::remove_if(archive.begin(),
                                 archive.end(),
                                 [&](const std::vector<int> &s)
-                                { return compare(new_sol, s) == 0; }),
+                                { return compare(new_sol, s) == SOL1_DOMINATION; }),
                  archive.end());
    break;
   }

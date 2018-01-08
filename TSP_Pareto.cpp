@@ -105,7 +105,7 @@ Archive TSP_Pareto::solution()
 {
  if (archive.empty())
   for (int i = 0 ; i < start_population; i++)
-   archive.push_back(random_solution());
+   filter_online(archive, random_solution());
 
  while (current_generation < generation)
  {

@@ -17,5 +17,6 @@ add_executable(tsp
     ../TSP_Random.cpp
     ../TSP_Scalar.cpp
     ../TSP_Pareto.cpp
+    ../TSP_SimplePareto.cpp
     ../Instance.cpp
 )

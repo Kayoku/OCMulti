@@ -6,6 +6,7 @@
 #include "TSP_Random.h"
 #include "TSP_Scalar.h"
 #include "TSP_Pareto.h"
+#include "TSP_SimplePareto.h"
 
 void write_archive(std::ostream &out, Archive &archive, TSP &tsp)
 {
@@ -37,7 +38,13 @@ int main(int argc, char *argv[])
  for (int i = 0 ; i < argc-1 ; i++)
   to_optimize.push_back(Instance("../../instances/random"+std::string(argv[i+1])+"100.tsp"));
 
- TSP_Random tsp_random(to_optimize, 100);
+ TSP_SimplePareto tsp_simplepareto(to_optimize, 100, 2000);
+ auto archive = tsp_simplepareto.solution();
+ std::ofstream file_random("simplepareto.dat");
+ write_archive(file_random, archive, tsp_simplepareto);
+ file_random.close();
+
+/* TSP_Random tsp_random(to_optimize, 100);
  TSP_Scalar tsp_scalar(to_optimize, 0.1);
  TSP_Pareto tsp_pareto(to_optimize, 100, 100, 10, 1);
 
@@ -68,7 +75,7 @@ int main(int argc, char *argv[])
  std::ofstream file_hybrid("hybrid.dat");
  write_archive(file_hybrid, archive_h, tsp_hybrid);
  file_hybrid.close();
-
+*/
  /*
  // Création du TSP filter
  TSP_Scalar tsp(to_optimize, 0.01);
