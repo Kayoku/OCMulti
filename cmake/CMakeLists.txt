@@ -14,8 +14,8 @@ include_directories(
 add_executable(tsp
     ../tsp_main.cpp
     ../TSP.cpp
-    ../TSP_random.cpp
-    ../TSP_filter.cpp
-    ../TSP_scalar.cpp
+    ../TSP_Random.cpp
+    ../TSP_Scalar.cpp
+    ../TSP_Pareto.cpp
     ../Instance.cpp
 )

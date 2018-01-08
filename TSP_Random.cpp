@@ -1,17 +1,13 @@
-#include "TSP_random.h"
+#include "TSP_Random.h"
 #include <algorithm>
 #include <random>
 
 ////////////////////////////////////////////////////////////////////////////
- Sol TSP_Random::random_solution()
+Archive TSP_Random::solution()
 ////////////////////////////////////////////////////////////////////////////
 {
- std::vector<int> sol;
+ for (int i = 0 ; i < nb_random ; i++)
+  archive.push_back(random_solution());
 
- for (int i = 0 ; i < 100 ; i++)
-  sol.push_back(i);
-
- std::random_shuffle(sol.begin(), sol.end());
-
- return sol;
+ return archive;
 }
