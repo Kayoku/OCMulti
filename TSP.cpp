@@ -163,7 +163,7 @@ Domination TSP::compare
 {
  int cpt = 0;
  for (size_t i = 0 ; i < instances.size() ; i++)
-  if (evaluation(i, sol1) < evaluation(i, sol2))
+  if (evaluation(i, sol1) <= evaluation(i, sol2))
    cpt++;
 
  // sol1 domine

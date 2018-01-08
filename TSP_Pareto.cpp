@@ -109,6 +109,8 @@ Archive TSP_Pareto::solution()
 
  while (current_generation < generation)
  {
+  std::cout << "gen: " << current_generation << "(" << archive.size()
+                                             << ")" << std::endl;
   Archive childs = reproduction(); 
   Archive mutants = mutation();
 

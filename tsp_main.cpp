@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
   to_optimize.push_back(Instance("../../instances/random"+std::string(argv[i+1])+"100.tsp"));
 
  TSP_Random tsp_random(to_optimize, 100);
- TSP_Scalar tsp_scalar(to_optimize, 0.01);
+ TSP_Scalar tsp_scalar(to_optimize, 0.1);
  TSP_Pareto tsp_pareto(to_optimize, 100, 100, 10, 1);
 
  std::cout << "Start of random..." << std::endl;
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
  std::cout << "Start of pareto..." << std::endl;
  auto archive_p = tsp_pareto.solution();
 
- TSP_Pareto tsp_hybrid(to_optimize, archive_s, 100, 100, 10, 1);
+ TSP_Pareto tsp_hybrid(to_optimize, archive_s, 100, 1000, 50, 1);
  std::cout << "Start of hybrid..." << std::endl;
  auto archive_h = tsp_hybrid.solution();
  std::cout << "End" << std::endl;

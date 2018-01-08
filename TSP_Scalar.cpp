@@ -41,6 +41,7 @@ Archive TSP_Scalar::solution()
 ////////////////////////////////////////////////////////////////////////////
 {
  // Génération des points liés à un poids
+ int cpt = 0;
  for (float w = 0.0f ; w <= 2.0f ; w+=step*2)
  {
   std::vector<float> weights = {w, 2.0f - w};
@@ -54,6 +55,8 @@ Archive TSP_Scalar::solution()
   }
 
   archive.push_back(new_sol);
+  std::cout << "cpt: " << cpt << std::endl;
+  cpt++;
  }
 
  Archive final_archive;

@@ -27,7 +27,7 @@ class TSP_Pareto : public TSP
   {}
 
   TSP_Pareto(std::vector<Instance> &instances,
-             Archive archive,
+             Archive ar,
              int start_population,
              int generation,
              int nb_mutation,
@@ -38,7 +38,7 @@ class TSP_Pareto : public TSP
    nb_mutation(nb_mutation),
    mutation_intensity(mutation_intensity),
    current_generation(0)
-  { archive = archive; }
+  { archive = ar; }
 
   Archive solution() override;
 
