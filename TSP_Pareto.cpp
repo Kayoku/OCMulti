@@ -103,8 +103,9 @@ Sol TSP_Pareto::order_crossover
 Archive TSP_Pareto::solution()
 ////////////////////////////////////////////////////////////////////////////
 {
- for (int i = 0 ; i < start_population; i++)
-  archive.push_back(random_solution());
+ if (archive.empty())
+  for (int i = 0 ; i < start_population; i++)
+   archive.push_back(random_solution());
 
  while (current_generation < generation)
  {

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include "Instance.h"
 #include "TSP.h"
 #include "TSP_Random.h"
@@ -8,6 +9,11 @@
 
 void write_archive(std::ostream &out, Archive &archive, TSP &tsp)
 {
+ // Tri l'archive
+ std::sort(archive.begin(), archive.end(),
+           [&](const Sol &s1, const Sol &s2)
+           { return tsp.evaluations(s1)[0] < tsp.evaluations(s2)[0]; });
+
  for (size_t i = 0 ; i < archive.size() ; i++)
  {
   auto evals = tsp.evaluations(archive[i]);
@@ -41,6 +47,10 @@ int main(int argc, char *argv[])
  auto archive_s = tsp_scalar.solution();
  std::cout << "Start of pareto..." << std::endl;
  auto archive_p = tsp_pareto.solution();
+
+ TSP_Pareto tsp_hybrid(to_optimize, archive_s, 100, 100, 10, 1);
+ std::cout << "Start of hybrid..." << std::endl;
+ auto archive_h = tsp_hybrid.solution();
  std::cout << "End" << std::endl;
  
  std::ofstream file_random("random.dat");
@@ -54,6 +64,11 @@ int main(int argc, char *argv[])
  std::ofstream file_pareto("pareto.dat");
  write_archive(file_pareto, archive_p, tsp_pareto);
  file_pareto.close();
+
+ std::ofstream file_hybrid("hybrid.dat");
+ write_archive(file_hybrid, archive_h, tsp_hybrid);
+ file_hybrid.close();
+
  /*
  // Création du TSP filter
  TSP_Scalar tsp(to_optimize, 0.01);
