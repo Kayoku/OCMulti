@@ -23,12 +23,14 @@ class TSP
   Archive archive;
   std::random_device rd;
   std::mt19937 g;
+  int follow_step;
 
  public:
   TSP(std::vector<Instance> &instances):
    instances(instances),
    rd(),
-   g(rd())
+   g(rd()),
+   follow_step(-1)
   {
    // for std::random_shuffle
    srand(time(0));
@@ -52,6 +54,9 @@ class TSP
   std::vector<int> evaluations(Sol solution);
   int evaluations_weight(Sol solution, std::vector<float> weights);
   int evaluation(int i, Sol solution, float weight=1);
+
+  /* Fonctions de suivi */
+  void do_following(int step) {follow_step = step; }
 
   // Fonction à override renvoyant une archive d'un front 
   virtual Archive solution() = 0;

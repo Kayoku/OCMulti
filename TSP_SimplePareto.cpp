@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <iostream>
 
+#include <chrono>
+
 ////////////////////////////////////////////////////////////////////////////
 void TSP_SimplePareto::full_two_opt
 ////////////////////////////////////////////////////////////////////////////
@@ -25,18 +27,19 @@ void TSP_SimplePareto::full_two_opt
 Archive TSP_SimplePareto::solution()
 ////////////////////////////////////////////////////////////////////////////
 {
- //for (int i = 0 ; i < start_population; i++)
- // filter_online(archive, random_solution());
  archive.push_back(random_solution());
 
  while (current_generation < generation)
  {
-  std::cout << "gen: " << current_generation << "(" << archive.size()
-                                             << ")" << std::endl;
   int choose_sol = g()%archive.size();
+
   full_two_opt(archive[choose_sol]);
 
+  std::cout << current_generation << ": " << archive.size() << std::endl;
   current_generation++;
+
+  if (follow_step > 0 && current_generation%follow_step == 0)
+   write_archive(archive, "tsp-simplepareto-"+std::to_string(current_generation)+".dat");
  }
 
  return archive;

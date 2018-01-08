@@ -20,3 +20,7 @@ add_executable(tsp
     ../TSP_SimplePareto.cpp
     ../Instance.cpp
 )
+
+add_executable(test
+    ../test.cpp
+)

@@ -206,12 +206,6 @@ void TSP::write_archive
 Sol TSP::two_opt(Sol sol, int id1, int id2)
 ////////////////////////////////////////////////////////////////////////////
 {
- while (id1 < id2)
- {
-  std::iter_swap(sol.begin()+id1, sol.begin()+id2);
-  id1++;
-  id2--;
- }
+ std::reverse(sol.begin()+id1, sol.begin()+id2+1);
  return sol;
 }
-

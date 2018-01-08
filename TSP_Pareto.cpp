@@ -18,7 +18,7 @@ Archive TSP_Pareto::mutation()
    id1 = g()%new_mutant.size();
    id2 = g()%new_mutant.size();
    while (id1 == id2)
-    id2 = g()%new_mutant.size();
+    id2 = (g()+1)%new_mutant.size();
 
    if (id2 > id1)
    {
@@ -46,7 +46,7 @@ Archive TSP_Pareto::reproduction()
   int parent1 = g()%archive.size();
   int parent2 = g()%archive.size();
   while (parent1 == parent2)
-   parent2 = g()%archive.size();
+   parent2 = (g()+1)%archive.size();
 
   auto new_child = order_crossover(archive[parent1], archive[parent2]); 
   childs.push_back(new_child);
