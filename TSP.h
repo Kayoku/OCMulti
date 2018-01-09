@@ -25,6 +25,7 @@ class TSP
   std::random_device rd;
   std::mt19937 g;
   int follow_step;
+  int next_step;
 
  public:
   TSP(std::vector<Instance> &instances,
@@ -33,7 +34,8 @@ class TSP
    name(name),
    rd(),
    g(rd()),
-   follow_step(-1)
+   follow_step(-1),
+   next_step(-1)
   {
    // for std::random_shuffle
    srand(time(0));
@@ -59,8 +61,8 @@ class TSP
   int evaluation(int i, Sol solution, float weight=1);
 
   /* Fonctions de suivi */
-  void set_following(int step) {follow_step = step; }
-  void do_following(int cpt, int value);
+  void set_following(int step) {follow_step = step; next_step = step; }
+  void do_following(int value);
 
   // Fonction à override renvoyant une archive d'un front 
   virtual Archive solution() = 0;

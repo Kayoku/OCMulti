@@ -1,14 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
-#include <string>
-#include <memory>
-
 #include "Instance.h"
 #include "TSP.h"
 #include "TSP_Random.h"
 #include "TSP_Scalar.h"
-#include "TSP_GenPareto.h"
+#include "TSP_Pareto.h"
 #include "TSP_SimplePareto.h"
 
 ////////////////////////////////////////////////////////////////////////////
@@ -29,65 +26,22 @@ void write_archive(std::ostream &out, Archive &archive, TSP &tsp)
  }
 }
 
-////////////////////////////////////////////////////////////////////////////
-void usage()
-////////////////////////////////////////////////////////////////////////////
-{
- std::cerr << "usage: ./tsp <AB/CD/EF> <scalar/pareto/pareto-simple/hybrid> <time/value> limit step-follow" << std::endl;
- std::cerr << "       ./tsp AB scalar time 100\n" 
-           << "       ./tsp AB pareto value 1000 10\n";
- exit(-1);
-}
-
-////////////////////////////////////////////////////////////////////////////
 int main(int argc, char *argv[])
-////////////////////////////////////////////////////////////////////////////
 {
- if (argc != 5 && argc != 6)
-  usage();
-
- std::string instance_name(argv[1]); 
- std::string algo_str(argv[2]);
- std::string run_type(argv[3]);
- int limit = std::stoi(argv[4]);
- int step_follow = -1;
- if (argc == 6)
-  step_follow = std::stoi(argv[5]);
-
- // Récupération des instances
+ if (argc == 1)
+ {
+  std::cerr << "Bad args." << std::endl;
+  return -1;
+ }
 
  std::vector<Instance> to_optimize;
 
- {
-  for (auto letter : instance_name)
-  {
-   std::string name = "../../instances/random"+std::string(1, letter)+"100.tsp";
-   to_optimize.push_back(Instance(name));
-  }
- }
+ // Récupération des instances
+ for (int i = 0 ; i < argc-1 ; i++)
+  to_optimize.push_back(Instance("../../instances/random"+std::string(argv[i+1])+"100.tsp"));
 
- // Choix de l'algo
- std::unique_ptr<TSP> algo;
- bool is_time = false;
- if (run_type == "time")
-  is_time = true;
-
- {
-  if (algo_str == "scalar")
-   algo = std::unique_ptr<TSP>(new TSP_Scalar(to_optimize, "", is_time, limit, step_follow)); 
-  else if (algo_str == "pareto")
-   algo = std::unique_ptr<TSP>(new TSP_GenPareto(to_optimize, "", is_time, 100, limit, 50, 5, step_follow));
-  else if (algo_str == "pareto-simple")
-   algo = std::unique_ptr<TSP>(new TSP_SimplePareto(to_optimize, "", is_time, 100, limit, step_follow));
-  else
-   usage();
- }
-
- // Lancement de l'algorithme
- auto archive = algo->solution();
- std::ofstream file(algo->get_name()+"/"+algo_str+".dat");
- write_archive(file, archive, *algo);
- file.close();
+ TSP_Scalar tsp_scalar(to_optimize, "rnd-10", 10, true, 1);
+ auto archive = tsp_scalar.solution();
 
  /*TSP_SimplePareto tsp_simplepareto(to_optimize, 100, 2000);
  auto archive = tsp_simplepareto.solution();

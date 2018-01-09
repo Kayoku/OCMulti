@@ -22,6 +22,8 @@ class TSP_Random : public TSP
    nb_random(nb_random)
   {}
 
+  void solution_time() override;
+  void solution_value() override;
   Archive solution() override;
   std::string get_name() override;
 };

@@ -43,13 +43,12 @@ void TSP_Scalar::solution_time()
  int rd1, cpt = 0;
  std::vector<float> weights;
  Sol new_sol, new_sol2;
- auto t1 = std::chrono::high_resolution_clock::now();
- auto t2 = std::chrono::high_resolution_clock::now();
- auto diff = std::chrono::duration_cast<std::chrono::seconds>(t2-t1).count();
+ auto time_init = std::chrono::high_resolution_clock::now();
+ auto time_it = std::chrono::high_resolution_clock::now();
+ auto diff = std::chrono::duration_cast<std::chrono::seconds>(time_it-time_init).count();
 
- while (diff < time_stop)
+ while (diff < limit)
  {
-  t1 = std::chrono::high_resolution_clock::now();
   cpt++;
   // Génère un poids aléatoire
   rd1 = g()%1001;
@@ -65,10 +64,14 @@ void TSP_Scalar::solution_time()
 
   filter_online(archive, new_sol);
 
-  do_following(cpt, diff);
 
-  diff = std::chrono::duration_cast<std::chrono::seconds>(t1-t2).count();
+  time_it = std::chrono::high_resolution_clock::now();
+  diff = std::chrono::duration_cast<std::chrono::seconds>(time_it-time_init).count();
+  std::cout << '\r' << diff << '/' << limit << " (" << archive.size() << ")" << std::flush;
+
+  do_following(diff);
  }
+ std::cout << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -76,10 +79,10 @@ void TSP_Scalar::solution_value()
 ////////////////////////////////////////////////////////////////////////////
 {
  int cpt = 0;
- for (int w = 0; w <= max_weight_step ; w++)
+ for (int w = 0; w <= limit ; w++)
  {
   cpt++;
-  std::vector<float> weights = {(float)w,(float)(max_weight_step - w)};
+  std::vector<float> weights = {(float)w,(float)(limit - w)};
   Sol new_sol; 
   Sol new_sol2 = random_solution(); 
   
@@ -91,18 +94,21 @@ void TSP_Scalar::solution_value()
   
   filter_online(archive, new_sol);
   
-  do_following(cpt, cpt);
+  do_following(cpt);
+
+  std::cout << '\r' << cpt << '/' << limit << " (" << archive.size() << ")" << std::flush;
  }
+ std::cout << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////
 Archive TSP_Scalar::solution()
 ////////////////////////////////////////////////////////////////////////////
 {
- if (!is_random)
-  solution_value();
- else
+ if (is_time)
   solution_time();
+ else
+  solution_value();
 
  return archive;
 }

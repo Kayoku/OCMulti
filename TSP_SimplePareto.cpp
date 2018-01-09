@@ -24,24 +24,53 @@ void TSP_SimplePareto::full_two_opt
 }
 
 ////////////////////////////////////////////////////////////////////////////
+void TSP_SimplePareto::solution_value()
+////////////////////////////////////////////////////////////////////////////
+{
+ while (current_generation < limit)
+ {
+  current_generation++;
+
+  full_two_opt(archive[g()%archive.size()]); 
+
+  do_following(current_generation); 
+  std::cout << '\r' << current_generation << '/' << limit << " (" << archive.size() << ")" << std::flush;
+ }
+ std::cout << std::endl;
+}
+
+////////////////////////////////////////////////////////////////////////////
+void TSP_SimplePareto::solution_time()
+////////////////////////////////////////////////////////////////////////////
+{
+ auto time_init = std::chrono::high_resolution_clock::now();
+ auto time_it = std::chrono::high_resolution_clock::now();
+ auto diff = std::chrono::duration_cast<std::chrono::seconds>(time_it-time_init).count();
+
+ while (diff < limit)
+ { 
+  current_generation++;
+
+  full_two_opt(archive[g()%archive.size()]); 
+
+  time_it = std::chrono::high_resolution_clock::now();
+  diff = std::chrono::duration_cast<std::chrono::seconds>(time_it-time_init).count();
+  do_following(diff); 
+  std::cout << '\r' << diff << '/' << limit << " (" << archive.size() << ")" << std::flush;
+ } 
+ std::cout << std::endl;
+}
+
+////////////////////////////////////////////////////////////////////////////
 Archive TSP_SimplePareto::solution()
 ////////////////////////////////////////////////////////////////////////////
 {
  archive.push_back(random_solution());
 
- while (current_generation < generation)
- {
-  int choose_sol = g()%archive.size();
-
-  full_two_opt(archive[choose_sol]);
-
-  std::cout << current_generation << ": " << archive.size() << std::endl;
-  current_generation++;
-
-  do_following(current_generation, current_generation);
-  if (follow_step > 0 && current_generation%follow_step == 0)
-   write_archive(archive, "tsp-simplepareto-"+std::to_string(current_generation)+".dat");
- }
+ if (is_time)
+  solution_time();
+ else
+  solution_value();
 
  return archive;
 }

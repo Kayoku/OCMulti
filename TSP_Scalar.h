@@ -6,26 +6,19 @@
 class TSP_Scalar : public TSP
 {
  private:
-  int max_weight_step;
-  int time_stop;
-  bool is_random;
+  int limit;
+  bool is_time;
 
  public:
   TSP_Scalar(std::vector<Instance> &instances,
              std::string name,
-             int stop,
-             bool is_random,
+             bool is_time,
+             int limit,
              int step = -1):
    TSP(instances, name),
-   max_weight_step(-1),
-   time_stop(-1),
-   is_random(is_random)
+   limit(limit),
+   is_time(is_time)
   {
-   if (is_random)
-    time_stop = stop;
-   else
-    max_weight_step = stop;
-    
    set_following(step);
   }
 

@@ -214,10 +214,12 @@ Sol TSP::two_opt(Sol sol, int id1, int id2)
 void TSP::do_following
 ////////////////////////////////////////////////////////////////////////////
 (
- int cpt,
  int value
 )
 {
- if (follow_step > 0 && cpt%follow_step == 0)
-  write_archive(archive, get_name()+"/"+get_name()+"-"+name+"-"+std::to_string(value)+".dat");
+ if (follow_step > 0 && value > next_step)
+ {
+  write_archive(archive, get_name()+"/"+get_name()+"-"+name+"-"+std::to_string(next_step)+".dat");
+  next_step += follow_step;
+ }
 }

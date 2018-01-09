@@ -1,9 +1,10 @@
-#include "TSP_Pareto.h"
+#include "TSP_GenPareto.h"
 #include <algorithm>
 #include <iostream>
+#include <chrono>
 
 ////////////////////////////////////////////////////////////////////////////
-Archive TSP_Pareto::mutation()
+Archive TSP_GenPareto::mutation()
 ////////////////////////////////////////////////////////////////////////////
 {
  Archive mutants;
@@ -37,7 +38,7 @@ Archive TSP_Pareto::mutation()
 }
 
 ////////////////////////////////////////////////////////////////////////////
-Archive TSP_Pareto::reproduction()
+Archive TSP_GenPareto::reproduction()
 ////////////////////////////////////////////////////////////////////////////
 {
  Archive childs;
@@ -55,7 +56,7 @@ Archive TSP_Pareto::reproduction()
 }
 
 ////////////////////////////////////////////////////////////////////////////
-Sol TSP_Pareto::order_crossover
+Sol TSP_GenPareto::order_crossover
 ////////////////////////////////////////////////////////////////////////////
 (
  Sol parent1,
@@ -100,34 +101,81 @@ Sol TSP_Pareto::order_crossover
 }
 
 ////////////////////////////////////////////////////////////////////////////
-Archive TSP_Pareto::solution()
+void TSP_GenPareto::solution_time()
 ////////////////////////////////////////////////////////////////////////////
 {
+ // On remplit la population de départ si celle-ci n'est pas déjà
+ // générée.
  if (archive.empty())
   for (int i = 0 ; i < start_population; i++)
    filter_online(archive, random_solution());
+ 
+ auto time_init = std::chrono::high_resolution_clock::now();
+ auto time_it = std::chrono::high_resolution_clock::now();
+ auto diff = std::chrono::duration_cast<std::chrono::seconds>(time_it-time_init).count();
 
- while (current_generation < generation)
+ while (diff < limit)
  {
-  std::cout << "gen: " << current_generation << "(" << archive.size()
-                                             << ")" << std::endl;
+  current_generation++;
   Archive childs = reproduction(); 
   Archive mutants = mutation();
-
+   
   for (auto c : childs)
    filter_online(archive, c);
-  
+   
+  for (auto m : mutants)
+   filter_online(archive, m);
+ 
+  time_it = std::chrono::high_resolution_clock::now();
+  diff = std::chrono::duration_cast<std::chrono::seconds>(time_it-time_init).count();
+  do_following(diff);
+  std::cout << '\r' << diff << '/' << limit << " (" << archive.size() << ")" << std::flush;
+ }
+ std::cout << std::endl;
+}
+
+////////////////////////////////////////////////////////////////////////////
+void TSP_GenPareto::solution_value()
+////////////////////////////////////////////////////////////////////////////
+{
+ // On remplit la population de départ si celle-ci n'est pas déjà
+ // générée.
+ if (archive.empty())
+  for (int i = 0 ; i < start_population; i++)
+   filter_online(archive, random_solution());
+ 
+ while (current_generation < limit)
+ {
+  current_generation++;
+  Archive childs = reproduction(); 
+  Archive mutants = mutation();
+   
+  for (auto c : childs)
+   filter_online(archive, c);
+   
   for (auto m : mutants)
    filter_online(archive, m);
 
-  current_generation++;
+  do_following(current_generation);
+  std::cout << '\r' << current_generation << '/' << limit << " (" << archive.size() << ")" << std::flush;
  }
+ std::cout << std::endl;
+}
+
+////////////////////////////////////////////////////////////////////////////
+Archive TSP_GenPareto::solution()
+////////////////////////////////////////////////////////////////////////////
+{
+ if (is_time)
+  solution_time();
+ else
+  solution_value();
 
  return archive;
 }
 
 ////////////////////////////////////////////////////////////////////////////
-std::string TSP_Pareto::get_name()
+std::string TSP_GenPareto::get_name()
 ////////////////////////////////////////////////////////////////////////////
 {
  return "pareto";
@@ -176,7 +224,7 @@ std::string TSP_Pareto::get_name()
 }
 
 ////////////////////////////////////////////////////////////////////////////
-void TSP_Pareto::filter_scalar()
+void TSP_GenPareto::filter_scalar()
 ////////////////////////////////////////////////////////////////////////////
 {
  Archive new_archive;
