@@ -11,16 +11,13 @@ void TSP_GreedyPareto::full_two_opt
  Sol sol
 )
 {
- Sol new_sol;
-
+ Archive ar;
  for (size_t i = 0 ; i < sol.size() ; i++)
- {
   for (size_t j = i+1 ; j < sol.size() ; j++)
-  {
-   new_sol = two_opt(sol, i, j); 
-   filter_online(archive, new_sol); 
-  }
- } 
+   filter_online(ar, two_opt(sol, i, j)); 
+
+ for (auto a: ar)
+  filter_online(archive, a);
 }
 
 ////////////////////////////////////////////////////////////////////////////

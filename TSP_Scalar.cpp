@@ -64,7 +64,6 @@ void TSP_Scalar::solution_time()
 
   filter_online(archive, new_sol);
 
-
   time_it = std::chrono::high_resolution_clock::now();
   diff = std::chrono::duration_cast<std::chrono::seconds>(time_it-time_init).count();
   std::cout << '\r' << diff << "s/" << limit << "s (" << archive.size() << ")" << std::flush;

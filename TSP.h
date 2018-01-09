@@ -2,6 +2,7 @@
 #define TSP_DEFINE
 
 #include "Instance.h"
+#include <iostream>
 #include <vector>
 #include <random>
 
@@ -39,6 +40,7 @@ class TSP
   {
    // for std::random_shuffle
    srand(time(0));
+   std::cout << "rd: " << g() << std::endl;
   }
 
   /* Fonctions utiles */
