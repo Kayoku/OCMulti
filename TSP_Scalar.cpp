@@ -67,7 +67,7 @@ void TSP_Scalar::solution_time()
 
   time_it = std::chrono::high_resolution_clock::now();
   diff = std::chrono::duration_cast<std::chrono::seconds>(time_it-time_init).count();
-  std::cout << '\r' << diff << '/' << limit << " (" << archive.size() << ")" << std::flush;
+  std::cout << '\r' << diff << "s/" << limit << "s (" << archive.size() << ")" << std::flush;
 
   do_following(diff);
  }
@@ -96,7 +96,7 @@ void TSP_Scalar::solution_value()
   
   do_following(cpt);
 
-  std::cout << '\r' << cpt << '/' << limit << " (" << archive.size() << ")" << std::flush;
+  std::cout << '\r' << cpt << "/" << limit << " (" << archive.size() << ")" << std::flush;
  }
  std::cout << std::endl;
 }

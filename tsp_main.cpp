@@ -9,7 +9,7 @@
 #include "TSP_Random.h"
 #include "TSP_Scalar.h"
 #include "TSP_GenPareto.h"
-#include "TSP_SimplePareto.h"
+#include "TSP_GreedyPareto.h"
 
 ////////////////////////////////////////////////////////////////////////////
 void write_archive(std::ostream &out, Archive &archive, TSP &tsp)
@@ -33,7 +33,7 @@ void write_archive(std::ostream &out, Archive &archive, TSP &tsp)
 void usage()
 ////////////////////////////////////////////////////////////////////////////
 {
- std::cerr << "usage: ./tsp <AB/CD/EF> <scalar/pareto/pareto-simple/hybrid> <time/value> limit step-follow" << std::endl;
+ std::cerr << "usage: ./tsp <AB/CD/EF> <scalar/gen/greedy/hybrid> <time/value> limit step-follow" << std::endl;
  std::cerr << "       ./tsp AB scalar time 100\n" 
            << "       ./tsp AB pareto value 1000 10\n";
  exit(-1);
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
  {
   for (auto letter : instance_name)
   {
-   std::string name = "../../instances/random"+std::string(1, letter)+"100.tsp";
+   std::string name = "instances/random"+std::string(1, letter)+"100.tsp";
    to_optimize.push_back(Instance(name));
   }
  }
@@ -75,21 +75,21 @@ int main(int argc, char *argv[])
  {
   if (algo_str == "scalar")
    algo = std::unique_ptr<TSP>(new TSP_Scalar(to_optimize, "", is_time, limit, step_follow)); 
-  else if (algo_str == "pareto")
-   algo = std::unique_ptr<TSP>(new TSP_GenPareto(to_optimize, "", is_time, 100, limit, 50, 5, step_follow));
-  else if (algo_str == "pareto-simple")
-   algo = std::unique_ptr<TSP>(new TSP_SimplePareto(to_optimize, "", is_time, 100, limit, step_follow));
+  else if (algo_str == "gen")
+   algo = std::unique_ptr<TSP>(new TSP_GenPareto(to_optimize, "", is_time, 1000, limit, 200, 5, step_follow));
+  else if (algo_str == "greedy")
+   algo = std::unique_ptr<TSP>(new TSP_GreedyPareto(to_optimize, "", is_time, 1, limit, step_follow));
   else
    usage();
  }
 
  // Lancement de l'algorithme
  auto archive = algo->solution();
- std::ofstream file(algo->get_name()+"/"+algo_str+".dat");
+ std::ofstream file(algo_str+".dat");
  write_archive(file, archive, *algo);
  file.close();
 
- /*TSP_SimplePareto tsp_simplepareto(to_optimize, 100, 2000);
+ /*TSP_GreedyPareto tsp_simplepareto(to_optimize, 100, 2000);
  auto archive = tsp_simplepareto.solution();
  std::ofstream file_random("simplepareto.dat");
  write_archive(file_random, archive, tsp_simplepareto);

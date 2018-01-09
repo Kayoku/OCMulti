@@ -117,7 +117,11 @@ void TSP_GenPareto::solution_time()
  while (diff < limit)
  {
   current_generation++;
-  Archive childs = reproduction(); 
+
+  Archive childs;
+  if (archive.size() >= 2)
+   childs = reproduction(); 
+
   Archive mutants = mutation();
    
   for (auto c : childs)
@@ -129,7 +133,7 @@ void TSP_GenPareto::solution_time()
   time_it = std::chrono::high_resolution_clock::now();
   diff = std::chrono::duration_cast<std::chrono::seconds>(time_it-time_init).count();
   do_following(diff);
-  std::cout << '\r' << diff << '/' << limit << " (" << archive.size() << ")" << std::flush;
+  std::cout << '\r' << diff << "s/" << limit << "s (" << archive.size() << ")" << std::flush;
  }
  std::cout << std::endl;
 }
@@ -147,7 +151,10 @@ void TSP_GenPareto::solution_value()
  while (current_generation < limit)
  {
   current_generation++;
-  Archive childs = reproduction(); 
+
+  Archive childs;
+  if (archive.size() >= 2)
+   childs = reproduction(); 
   Archive mutants = mutation();
    
   for (auto c : childs)
@@ -178,7 +185,8 @@ Archive TSP_GenPareto::solution()
 std::string TSP_GenPareto::get_name()
 ////////////////////////////////////////////////////////////////////////////
 {
- return "pareto";
+ return "pareto-s"+std::to_string(start_population)+"-m"+std::to_string(nb_mutation)+"-i"+std::to_string(mutation_intensity)+
+         (is_time ? "-t": "-l")+std::to_string(limit);
 }
 
 

@@ -3,7 +3,7 @@
 
 #include "TSP.h"
 
-class TSP_SimplePareto : public TSP
+class TSP_GreedyPareto : public TSP
 {
  private:
   int start_population;
@@ -12,7 +12,7 @@ class TSP_SimplePareto : public TSP
   bool is_time;
 
  public:
-  TSP_SimplePareto(std::vector<Instance> &instances,
+  TSP_GreedyPareto(std::vector<Instance> &instances,
              std::string name,
              bool is_time,
              int start_population, 
@@ -27,7 +27,7 @@ class TSP_SimplePareto : public TSP
    set_following(step);
   }
 
-  TSP_SimplePareto(std::vector<Instance> &instances,
+  TSP_GreedyPareto(std::vector<Instance> &instances,
              std::string name,
              Archive ar,
              bool is_time,

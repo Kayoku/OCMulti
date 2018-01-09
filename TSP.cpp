@@ -219,7 +219,7 @@ void TSP::do_following
 {
  if (follow_step > 0 && value > next_step)
  {
-  write_archive(archive, get_name()+"/"+get_name()+"-"+name+"-"+std::to_string(next_step)+".dat");
+  write_archive(archive, get_name()+"-"+name+"-"+std::to_string(next_step)+".dat");
   next_step += follow_step;
  }
 }

@@ -1,11 +1,11 @@
-#include "TSP_SimplePareto.h"
+#include "TSP_GreedyPareto.h"
 #include <algorithm>
 #include <iostream>
 
 #include <chrono>
 
 ////////////////////////////////////////////////////////////////////////////
-void TSP_SimplePareto::full_two_opt
+void TSP_GreedyPareto::full_two_opt
 ////////////////////////////////////////////////////////////////////////////
 (
  Sol sol
@@ -24,7 +24,7 @@ void TSP_SimplePareto::full_two_opt
 }
 
 ////////////////////////////////////////////////////////////////////////////
-void TSP_SimplePareto::solution_value()
+void TSP_GreedyPareto::solution_value()
 ////////////////////////////////////////////////////////////////////////////
 {
  while (current_generation < limit)
@@ -40,7 +40,7 @@ void TSP_SimplePareto::solution_value()
 }
 
 ////////////////////////////////////////////////////////////////////////////
-void TSP_SimplePareto::solution_time()
+void TSP_GreedyPareto::solution_time()
 ////////////////////////////////////////////////////////////////////////////
 {
  auto time_init = std::chrono::high_resolution_clock::now();
@@ -56,13 +56,13 @@ void TSP_SimplePareto::solution_time()
   time_it = std::chrono::high_resolution_clock::now();
   diff = std::chrono::duration_cast<std::chrono::seconds>(time_it-time_init).count();
   do_following(diff); 
-  std::cout << '\r' << diff << '/' << limit << " (" << archive.size() << ")" << std::flush;
+  std::cout << '\r' << diff << "s/" << limit << "s (" << archive.size() << ")" << std::flush;
  } 
  std::cout << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////
-Archive TSP_SimplePareto::solution()
+Archive TSP_GreedyPareto::solution()
 ////////////////////////////////////////////////////////////////////////////
 {
  archive.push_back(random_solution());
@@ -76,9 +76,8 @@ Archive TSP_SimplePareto::solution()
 }
 
 ////////////////////////////////////////////////////////////////////////////
-std::string TSP_SimplePareto::get_name()
+std::string TSP_GreedyPareto::get_name()
 ////////////////////////////////////////////////////////////////////////////
 {
- return "simple-pareto";
+ return "greedy-s"+std::to_string(start_population)+"-l"+std::to_string(limit);
 }
-
