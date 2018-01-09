@@ -126,6 +126,9 @@ int main(int argc, char *argv[])
 
  TSP_Scalar tsp_scalar(to_optimize, "", false, 10);
  auto s_archive = tsp_scalar.solution();
+ std::ofstream file_scalar("scalar-base.dat");
+ write_archive(file_scalar, s_archive, tsp_scalar);
+ file_scalar.close();
 
  for (int i = 0 ; i < nb_run ; i++)
  {
