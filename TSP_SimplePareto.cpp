@@ -38,6 +38,7 @@ Archive TSP_SimplePareto::solution()
   std::cout << current_generation << ": " << archive.size() << std::endl;
   current_generation++;
 
+  do_following(current_generation, current_generation);
   if (follow_step > 0 && current_generation%follow_step == 0)
    write_archive(archive, "tsp-simplepareto-"+std::to_string(current_generation)+".dat");
  }

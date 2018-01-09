@@ -209,3 +209,15 @@ Sol TSP::two_opt(Sol sol, int id1, int id2)
  std::reverse(sol.begin()+id1, sol.begin()+id2+1);
  return sol;
 }
+
+////////////////////////////////////////////////////////////////////////////
+void TSP::do_following
+////////////////////////////////////////////////////////////////////////////
+(
+ int cpt,
+ int value
+)
+{
+ if (follow_step > 0 && cpt%follow_step == 0)
+  write_archive(archive, get_name()+"/"+get_name()+"-"+name+"-"+std::to_string(value)+".dat");
+}

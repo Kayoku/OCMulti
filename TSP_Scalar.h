@@ -14,24 +14,26 @@ class TSP_Scalar : public TSP
   TSP_Scalar(std::vector<Instance> &instances,
              std::string name,
              int stop,
-             bool rnd,
+             bool is_random,
              int step = -1):
    TSP(instances, name),
    max_weight_step(-1),
    time_stop(-1),
-   is_random(rnd)
+   is_random(is_random)
   {
-   if (rnd)
+   if (is_random)
     time_stop = stop;
    else
     max_weight_step = stop;
     
-   do_following(step);
+   set_following(step);
   }
 
  Sol loop_k_opt(Sol sol, std::vector<float> weights);
 
  Archive solution() override;
+ void solution_time() override;
+ void solution_value() override;
  std::string get_name() override;
 };
 

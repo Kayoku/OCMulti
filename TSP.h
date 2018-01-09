@@ -59,10 +59,13 @@ class TSP
   int evaluation(int i, Sol solution, float weight=1);
 
   /* Fonctions de suivi */
-  void do_following(int step) {follow_step = step; }
+  void set_following(int step) {follow_step = step; }
+  void do_following(int cpt, int value);
 
   // Fonction à override renvoyant une archive d'un front 
   virtual Archive solution() = 0;
+  virtual void solution_time() = 0;
+  virtual void solution_value() = 0;
   virtual std::string get_name() = 0;
 };
 
