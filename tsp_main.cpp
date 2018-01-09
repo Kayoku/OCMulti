@@ -40,11 +40,14 @@ int main(int argc, char *argv[])
  for (int i = 0 ; i < argc-1 ; i++)
   to_optimize.push_back(Instance("../../instances/random"+std::string(argv[i+1])+"100.tsp"));
 
- TSP_SimplePareto tsp_simplepareto(to_optimize, 100, 2000);
+ TSP_Scalar tsp_scalar(to_optimize, "rnd-10", 10, true, 1);
+ auto archive = tsp_scalar.solution();
+
+ /*TSP_SimplePareto tsp_simplepareto(to_optimize, 100, 2000);
  auto archive = tsp_simplepareto.solution();
  std::ofstream file_random("simplepareto.dat");
  write_archive(file_random, archive, tsp_simplepareto);
- file_random.close();
+ file_random.close();*/
 
 /* TSP_Random tsp_random(to_optimize, 100);
  TSP_Scalar tsp_scalar(to_optimize, 0.1);

@@ -14,11 +14,12 @@ class TSP_Pareto : public TSP
 
  public:
   TSP_Pareto(std::vector<Instance> &instances,
+             std::string name,
              int start_population, 
              int generation,
              int nb_mutation,
              int mutation_intensity):
-   TSP(instances),
+   TSP(instances, name),
    start_population(start_population),
    generation(generation),
    nb_mutation(nb_mutation),
@@ -27,12 +28,13 @@ class TSP_Pareto : public TSP
   {}
 
   TSP_Pareto(std::vector<Instance> &instances,
+             std::string name,
              Archive ar,
              int start_population,
              int generation,
              int nb_mutation,
              int mutation_intensity):
-   TSP(instances),
+   TSP(instances, name),
    start_population(start_population),
    generation(generation),
    nb_mutation(nb_mutation),
@@ -41,6 +43,7 @@ class TSP_Pareto : public TSP
   { archive = ar; }
 
   Archive solution() override;
+  std::string get_name() override;
 
   Archive mutation();
   Archive reproduction();

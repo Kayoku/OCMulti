@@ -20,14 +20,17 @@ class TSP
 {
  protected:
   std::vector<Instance> &instances;
+  std::string name;
   Archive archive;
   std::random_device rd;
   std::mt19937 g;
   int follow_step;
 
  public:
-  TSP(std::vector<Instance> &instances):
+  TSP(std::vector<Instance> &instances,
+      std::string name):
    instances(instances),
+   name(name),
    rd(),
    g(rd()),
    follow_step(-1)
@@ -60,6 +63,7 @@ class TSP
 
   // Fonction à override renvoyant une archive d'un front 
   virtual Archive solution() = 0;
+  virtual std::string get_name() = 0;
 };
 
 #endif

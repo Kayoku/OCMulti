@@ -1,6 +1,7 @@
 #include "TSP_Scalar.h"
 #include <algorithm>
 #include <iostream>
+#include <chrono>
 
 ////////////////////////////////////////////////////////////////////////////
 Sol TSP_Scalar::loop_k_opt
@@ -35,33 +36,81 @@ Sol TSP_Scalar::loop_k_opt
  return best_sol;
 }
 
-
 ////////////////////////////////////////////////////////////////////////////
 Archive TSP_Scalar::solution()
 ////////////////////////////////////////////////////////////////////////////
 {
  // Génération des points liés à un poids
  int cpt = 0;
- for (float w = 0.0f ; w <= 2.0f ; w+=step*2)
+
+ // Mode non random
+ if (!is_random)
  {
-  std::vector<float> weights = {w, 2.0f - w};
-  Sol new_sol;
-  Sol new_sol2 = random_solution(); 
-
-  while (new_sol != new_sol2)
+  for (int w = 0; w <= max_weight_step ; w++)
   {
-   new_sol = new_sol2;
-   new_sol2 = loop_k_opt(new_sol, weights);
-  }
+   cpt++;
+   std::vector<float> weights = {(float)w,(float)(max_weight_step - w)};
+   Sol new_sol;
+   Sol new_sol2 = random_solution(); 
 
-  archive.push_back(new_sol);
-  std::cout << "cpt: " << cpt << std::endl;
-  cpt++;
+   while (new_sol != new_sol2)
+   {
+    new_sol = new_sol2;
+    new_sol2 = loop_k_opt(new_sol, weights);
+   }
+
+   filter_online(archive, new_sol);
+
+   // Following
+   if (follow_step > 0 && cpt%follow_step == 0)
+    write_archive(archive, "scalar/scalar-"+name+"-"+std::to_string(cpt)+".dat");
+
+  }
+ }
+ // Mode random
+ else
+ {
+  int rd1;
+  std::vector<float> weights;
+  Sol new_sol, new_sol2;
+  auto t1 = std::chrono::high_resolution_clock::now();
+  auto t2 = std::chrono::high_resolution_clock::now();
+  auto diff = std::chrono::duration_cast<std::chrono::seconds>(t2-t1).count();
+
+  while (diff < time_stop)
+  {
+   t1 = std::chrono::high_resolution_clock::now();
+   cpt++;
+   // Génère un poids aléatoire
+   rd1 = g()%1001; 
+   weights = {(float)rd1, (float)(1000 - rd1)};
+
+   // Tant qu'on converge pas on continue 
+   new_sol2 = random_solution();
+   while (new_sol != new_sol2)
+   {
+    new_sol = new_sol2;
+    new_sol2 = loop_k_opt(new_sol, weights);
+   }
+
+   filter_online(archive, new_sol);
+
+   // Following
+   if (follow_step > 0 && cpt%follow_step == 0)
+    write_archive(archive, "scalar/scalar-"+name+"-"+std::to_string(diff)+".dat");
+
+   std::cout << "cpt: " << cpt << std::endl;
+   diff = std::chrono::duration_cast<std::chrono::seconds>(t1-t2).count();
+  }
  }
 
- Archive final_archive;
- for (auto s : archive)
-  filter_online(final_archive, s);
-
- return final_archive;
+ return archive;
 }
+
+////////////////////////////////////////////////////////////////////////////
+std::string TSP_Scalar::get_name()
+////////////////////////////////////////////////////////////////////////////
+{
+ return "scalar";
+}
+

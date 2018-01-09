@@ -16,12 +16,14 @@ class TSP_Random : public TSP
 
  public:
   TSP_Random(std::vector<Instance> &instances,
+             std::string name,
              int nb_random):
-   TSP(instances),
+   TSP(instances, name),
    nb_random(nb_random)
   {}
 
   Archive solution() override;
+  std::string get_name() override;
 };
 
 #endif

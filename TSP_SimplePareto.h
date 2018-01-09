@@ -12,25 +12,28 @@ class TSP_SimplePareto : public TSP
 
  public:
   TSP_SimplePareto(std::vector<Instance> &instances,
+             std::string name,
              int start_population, 
              int generation):
-   TSP(instances),
+   TSP(instances, name),
    start_population(start_population),
    generation(generation),
    current_generation(0)
   {}
 
   TSP_SimplePareto(std::vector<Instance> &instances,
+             std::string name,
              Archive ar,
              int start_population,
              int generation):
-   TSP(instances),
+   TSP(instances, name),
    start_population(start_population),
    generation(generation),
    current_generation(0)
   { archive = ar; }
 
   Archive solution() override;
+  std::string get_name() override;
   void full_two_opt(Sol sol);
 };
 
