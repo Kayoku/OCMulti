@@ -1,14 +1,14 @@
 library("mco")
 
 # read best-known Pareto front for the instance under consideration
-bestknown <- as.matrix(read.table("/home/m2mocad/bouchoucha/project/OCMulti/instances/best.randomAB100.tsp", dec="."))
+bestknown <- as.matrix(read.table("/home/kayoku/project/OCMulti/instances/best.randomAB100.tsp", dec="."))
 # force double
 bestknown <- bestknown + 0.0
 
 # read Pareto front approximation found by my favorite algorithm
 #monalgo <- read.table("../data-tsp/scalar.randomAB100.tsp")
 # instead, I just sample the best-known
-monalgo <- as.matrix(read.table("/home/m2mocad/bouchoucha/project/OCMulti/cmake/bin/hybrid.dat", dec="."))
+monalgo <- as.matrix(read.table("/home/kayoku/project/OCMulti/AB/scalar-1.dat", dec="."))
 monalgo <- monalgo + 0.0
 
 #bestknown[sample(nrow(bestknown), 100), ]

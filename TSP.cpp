@@ -50,6 +50,7 @@ int TSP::evaluation
 )
 {
  int value = 0; 
+ nb_compute_cost++;
 
  for (size_t j = 0 ; j < solution.size()-1 ; j++)
   value += weight * instances[i].distances[solution[j]][solution[j+1]];
@@ -77,7 +78,7 @@ Sol TSP::random_solution()
 Sol TSP::greedy_solution
 ////////////////////////////////////////////////////////////////////////////
 (
- std::vector<float> weights
+ std::vector<floatt> weights
 )
 {
  int nb_city = instances[0].distances.size();
@@ -98,29 +99,31 @@ Sol TSP::greedy_solution
 void TSP::filter_offline
 ////////////////////////////////////////////////////////////////////////////
 (
- Archive &archive
+ Archive &ar
 )
 {
  size_t i = 0;
 
  do
  {
-  auto elem = archive[i];
-  int current_size = archive.size();
+  auto elem = ar[i];
+  int current_size = ar.size();
 
-  archive.erase(std::remove_if(archive.begin(),
-                               archive.end(),
-                               [&](const std::vector<int> &s)
-                               { return compare(elem, s) == 0; }),
-                archive.end());
-  int new_size = archive.size();
+  ar.erase(std::remove_if(ar.begin(),
+                          ar.end(),
+                          [&](const std::vector<int> &s)
+                          { return compare(elem, s) == SOL1_DOMINATION; }),
+                ar.end());
+  ar.push_back(elem);
+  int new_size = ar.size();
+
   if (current_size != new_size)
    i=0;
   else
    i++;
- } while (i < archive.size());
-}
 
+ } while (i < ar.size());
+}
 
 ////////////////////////////////////////////////////////////////////////////
 void TSP::filter_online
@@ -132,7 +135,7 @@ void TSP::filter_online
 {
  for (size_t i = 0 ; i < archive.size() ; i++)
  {
-  int dom = compare(archive[i], new_sol);
+  Domination dom = compare(archive[i], new_sol);
 
   // new sol est dominé
   if (dom == SOL1_DOMINATION)

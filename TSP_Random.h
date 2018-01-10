@@ -13,6 +13,7 @@ class TSP_Random : public TSP
 {
  private:
  int nb_random;
+ bool online;
 
  public:
   TSP_Random(std::vector<Instance> &instances,

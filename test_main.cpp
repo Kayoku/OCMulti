@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
  ////////////////////////////////
  // Test du scalaire (10minutes)
  ////////////////////////////////
-
+/*
  for (int i = 0 ; i < nb_run ; i++)
  {
   TSP_Scalar tsp_scalar(to_optimize, "", true, temps);
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
   write_archive(file_random, archive, tsp_greedy);
   file_random.close();
  }
-
+*/
  ////////////////////////////
  // Hybrid (20min+scalar)
  ////////////////////////////
@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
  {
   TSP_GenPareto tsp_gen(to_optimize, "", s_archive, true, 1000, temps, 200, 5);
   auto archive = tsp_gen.solution();
-  std::ofstream file_random("gen-sc-"+std::to_string(i+1)+".dat");
+  std::ofstream file_random("gen-gsc-"+std::to_string(i+1)+".dat");
   write_archive(file_random, archive, tsp_gen);
   file_random.close();
  }

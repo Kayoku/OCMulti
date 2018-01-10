@@ -27,6 +27,7 @@ class TSP
   std::mt19937 g;
   int follow_step;
   int next_step;
+  long nb_compute_cost;
 
  public:
   TSP(std::vector<Instance> &instances,
@@ -36,11 +37,11 @@ class TSP
    rd(),
    g(rd()),
    follow_step(-1),
-   next_step(-1)
+   next_step(-1),
+   nb_compute_cost(0)
   {
    // for std::random_shuffle
    srand(time(0));
-   std::cout << "rd: " << g() << std::endl;
   }
 
   /* Fonctions utiles */
@@ -48,6 +49,8 @@ class TSP
   Sol greedy_solution(std::vector<float> weights = {1, 1});
   Domination compare(Sol sol1, Sol sol2); // compare deux solutions
   void write_archive(Archive &archive, std::string filename);
+  long get_compute_cost() { return nb_compute_cost; }
+  void reset_cost() { nb_compute_cost = 0; }
 
   /* Fonctions de voisinage */
   Sol two_opt(Sol sol, int id1, int id2);

@@ -21,6 +21,26 @@ add_executable(tsp
     ../Instance.cpp
 )
 
-add_executable(test
+add_executable(test_
     ../test.cpp
+)
+
+add_executable(test_tsp
+    ../test_main.cpp
+    ../TSP.cpp
+    ../TSP_Random.cpp
+    ../TSP_Scalar.cpp
+    ../TSP_GenPareto.cpp
+    ../TSP_GreedyPareto.cpp
+    ../Instance.cpp
+)
+
+add_executable(small_test
+    ../small_test_main.cpp
+    ../TSP.cpp
+    ../TSP_Random.cpp
+    ../TSP_Scalar.cpp
+    ../TSP_GenPareto.cpp
+    ../TSP_GreedyPareto.cpp
+    ../Instance.cpp
 )

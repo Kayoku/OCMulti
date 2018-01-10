@@ -14,14 +14,12 @@ Sol TSP_Scalar::loop_k_opt
  Sol best_sol = sol;
  Sol new_sol;
  int best_sol_cost = evaluations_weight(best_sol, weights);
- int new_sol_cost, id1, id2;
+ int new_sol_cost;
  
  for (size_t i = 0 ; i < sol.size() ; i++)
  {
   for (size_t j = i+1 ; j < sol.size() ; j++)
   {
-   id1 = i;
-   id2 = j;
    new_sol = two_opt(sol, i, j);   
 
    new_sol_cost = evaluations_weight(new_sol, weights);
